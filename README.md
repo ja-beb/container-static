@@ -1,11 +1,17 @@
-# docker-templates
-Docker templates for base NGINX sites.
+# Static Docker Container.
+Docker templates for building a static NGINX site using docker.
 
 
-## SSL Key config.
-The docker environment uses a nginx LAMP stack. This requires a self signed certificate to run localy and can be generated using the following commands.
-
+## Build
+Use the bin\generate-certs.sh script to create the required certificate directory `./ssl` and generate certificates for both the site and cdn server.
 ```
-$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout site.key -out site.crt
-$ openssl dhparam -out dhparam.pem 2048
+CONTAINER_NAME_PROXY=${CONTAINER_NAME_PROXY:-proxy-instance}
+CONTAINER_NAME_CDN=${CONTAINER_NAME_CDN:-cdn-instance}
+CONTAINER_NAME_SITE=${CONTAINER_NAME_SITE:-site-instance}
+```
+
+Once the certs have been generated run using the following:
+```
+docker-compose build
+docker-compose up -d
 ```
