@@ -5,10 +5,6 @@ services:
             context: .
             dockerfile: Containerfile-proxy
         container_name: "${CONTAINER_NAME_PROXY:-proxy-instance}"
-        environment:
-            - CONTAINER_NAME_PROXY=${CONTAINER_NAME_PROXY:-proxy-instance}
-            - CONTAINER_NAME_CDN=${CONTAINER_NAME_CDN:-cdn-instance}
-            - CONTAINER_NAME_SITE=${CONTAINER_NAME_SITE:-site-instance}
         networks:
             - app-network
             - app-internal
@@ -27,9 +23,6 @@ services:
         container_name: "${CONTAINER_NAME_CDN:-cdn-instance}"
         environment:
             - CONTAINER_SOURCE=cdn
-            - CONTAINER_NAME_PROXY=${CONTAINER_NAME_PROXY:-proxy-instance}
-            - CONTAINER_NAME_CDN=${CONTAINER_NAME_CDN:-cdn-instance}
-            - CONTAINER_NAME_SITE=${CONTAINER_NAME_SITE:-site-instance}
         build: 
             context: .
             dockerfile: Containerfile-nginx
@@ -46,9 +39,6 @@ services:
         container_name: "${CONTAINER_NAME_SITE:-site-instance}"
         environment:
             - CONTAINER_SOURCE=site
-            - CONTAINER_NAME_PROXY=${CONTAINER_NAME_PROXY:-proxy-instance}
-            - CONTAINER_NAME_CDN=${CONTAINER_NAME_CDN:-cdn-instance}
-            - CONTAINER_NAME_SITE=${CONTAINER_NAME_SITE:-site-instance}
         build: 
             context: .
             dockerfile: Containerfile-nginx

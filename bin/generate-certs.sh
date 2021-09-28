@@ -2,7 +2,10 @@
 # Generate ssl certificates for both the site and cdn server. used by proxy server.
 
 # create dirctory structure
-mkdir ssl
+if [ ! -z ./ssl ]
+then
+    mkdir ssl
+fi
 
 # Generate ssl certificates for site 
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ssl/site.key -out ssl/site.crt

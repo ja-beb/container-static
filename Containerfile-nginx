@@ -6,7 +6,6 @@ ARG CONTAINER_SOURCE=site
 RUN apk update && apk upgrade; 
 
 COPY "config.d/${CONTAINER_SOURCE}" /etc/nginx/conf.d
-COPY "docker-entrypoint.d/${CONTAINER_SOURCE}" /docker-entrypoint.d
 
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]

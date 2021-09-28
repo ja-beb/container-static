@@ -3,7 +3,6 @@ LABEL Maintainer="sean bourg <sean.bourg@gmail.com>"
 
 RUN apk update && apk upgrade; 
 
-COPY docker-entrypoint.d/proxy  /docker-entrypoint.d
 COPY config.d/proxy  /etc/nginx/conf.d/
 COPY ssl /etc/ssl/keys
 

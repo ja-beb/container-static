@@ -1,17 +1,32 @@
 # Static Docker Container.
-Docker templates for building a static NGINX site using docker.
+Docker templates for building a small static NGINX site using docker - serves as a proof of concept.
 
+## Setup, Configure and Run Containers
+1. Generate Site Certificates
+The `bin\generate-certs.sh` script can be used to create the required certificate directory `./ssl` and generate certificates for both the site and CDN server.
+2. Update docker environment variables in the `docker.env` file.
+3. Update host file to include the IP address for cdn.localhost and site.localhost (127.0.0.1 if ran locally).
+```
+127.0.0.1 cdn.localhost site.localhost
+::1 cdn.localhost site.localhost
+```
 
-## Build
-Use the bin\generate-certs.sh script to create the required certificate directory `./ssl` and generate certificates for both the site and cdn server.
+4. Load docker variables into current session.
 ```
-CONTAINER_NAME_PROXY=${CONTAINER_NAME_PROXY:-proxy-instance}
-CONTAINER_NAME_CDN=${CONTAINER_NAME_CDN:-cdn-instance}
-CONTAINER_NAME_SITE=${CONTAINER_NAME_SITE:-site-instance}
+[user@host container-static]$ set -a
+[user@host container-static]$ source docker.env
 ```
 
-Once the certs have been generated run using the following:
+5. Build docker containers.
 ```
-docker-compose build
-docker-compose up -d
+[ser@host container-static]$ docker-compose build
 ```
+
+6. Start docker containers.
+```
+[user@host container-static]$ docker-compose up -d
+```
+
+7. Open a web browser and navigate to the URI `https://cdn.localhost`. Once prompted accept certification.
+8. Navigate to the URI `https:/site.localhost`. Once prompted accept certification. The page `.\test-site\html\index.html` will be displayed.
+
