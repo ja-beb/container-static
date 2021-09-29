@@ -21,8 +21,6 @@ services:
 
     cdn:
         container_name: "${CONTAINER_NAME_CDN:-cdn-instance}"
-        environment:
-            - CONTAINER_SOURCE=cdn
         build: 
             context: .
             dockerfile: Containerfile-nginx
@@ -37,8 +35,6 @@ services:
 
     site:
         container_name: "${CONTAINER_NAME_SITE:-site-instance}"
-        environment:
-            - CONTAINER_SOURCE=site
         build: 
             context: .
             dockerfile: Containerfile-nginx
