@@ -1,10 +1,22 @@
 version: "3.7"
+
+# Place site and cdn servers on an internal network. All access should be through the proxy.
+networks:
+    app-network:
+        driver: bridge
+        internal: false
+        
+    app-internal:
+        driver: bridge
+        internal: true
+
 services: 
     proxy:
+        container_name: "${CONTAINER_NAME_PROXY:-proxy-instance}"
+        image: "${IMAGE_NAME_PROXY:-static-proxy-image}"
         build: 
             context: .
             dockerfile: Containerfile-proxy
-        container_name: "${CONTAINER_NAME_PROXY:-proxy-instance}"
         networks:
             - app-network
             - app-internal
@@ -21,9 +33,12 @@ services:
 
     cdn:
         container_name: "${CONTAINER_NAME_CDN:-cdn-instance}"
+        image: "${IMAGE_NAME_CDN:-static-cdn-image}"
         build: 
             context: .
             dockerfile: Containerfile-nginx
+            args:
+                - BUILD_SOURCE=cdn             
         volumes:
             - ./test-site/media:/var/www/media:ro
             - ./test-site/css:/var/www/css:ro
@@ -35,9 +50,12 @@ services:
 
     site:
         container_name: "${CONTAINER_NAME_SITE:-site-instance}"
+        image: "${IMAGE_NAME_SITE:-static-site-image}"
         build: 
             context: .
-            dockerfile: Containerfile-nginx
+            dockerfile: Containerfile-nginx    
+            args:
+                - BUILD_SOURCE=site
         volumes:
             - ./test-site/html:/var/www:ro
         networks:
@@ -45,13 +63,3 @@ services:
         ports:
             - "8081:80"
         restart: always
-
-# Place site and cdn servers on an internal network. All access should be through the proxy.
-networks:
-    app-network:
-        driver: bridge
-        internal: false
-        
-    app-internal:
-        driver: bridge
-        internal: true        
